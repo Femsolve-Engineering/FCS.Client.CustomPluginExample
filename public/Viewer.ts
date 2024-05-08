@@ -4,7 +4,7 @@
 declare const Femsolve: typeof import("fcs-core-viewer/fcs-core-viewer@types/Api");
 
 // Viewer loading setup
-export const loadViewer = async (viewerSessionToken: string, redCubeSize: number) => {
+export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: string, redCubeSize: number) => {
 
     class ExampleService extends Femsolve.CloudViewer.PluginService {
 
@@ -41,6 +41,7 @@ export const loadViewer = async (viewerSessionToken: string, redCubeSize: number
 
     const allSettings = new Femsolve.CloudViewer.ViewerSettings();
     allSettings.viewerStyleSettings = viewerStyle;
+    allSettings.ViewerServerBaseUrl = viewerBaseUrl; 
 
     // Viewer instantiation and addition of custom backend service,
     // if this part fails, nothing is loaded.

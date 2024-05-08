@@ -36,7 +36,7 @@ async function loadWebshop(accessUrl, viewerSessionToken, redCubeSize) {
     <script type="module" src="/dist/exampleViewer.js"></script>
     <script type="module">
         const viewerModule = await import('/dist/exampleViewer.js');
-        await Viewer.loadViewer('${viewerSessionToken}', ${redCubeSize});
+        await Viewer.loadViewer('${accessUrl}','${viewerSessionToken}', ${redCubeSize});
     </script>
 
 </body>

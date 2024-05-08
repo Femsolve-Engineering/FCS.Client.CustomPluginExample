@@ -12,6 +12,9 @@ const {
     loadWebshop
 } = require('./webshop')
 
+// Container access URL global variable
+containerAccessUrl = "http://localhost"
+
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,7 +32,7 @@ app.post('/view', async (req, res) => {
     // console.log(containerAccessUrl)
     // const sessionToken = await apiGenerateSessionTokenForContainer(containerId);
     // console.log(sessionToken)
-    const containerAccessUrl = "http://localhost" 
+    containerAccessUrl = "http://localhost" 
     const sessionToken = "dummyToken"
     const page = await loadWebshop(containerAccessUrl, sessionToken, 10);
     res.send(page);
