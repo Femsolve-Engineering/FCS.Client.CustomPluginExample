@@ -1,23 +1,45 @@
 const express = require('express');
+const path = require('path');
 
 require('dotenv').config();
+const { 
+    apiGetRunningContainerId,
+    apiGetBearerToken, 
+    apiGenerateSessionTokenForContainer,
+    apiGetAccessUrlForContainerId
+} = require('./fcsapi');
+const {
+    loadWebshop
+} = require('./webshop')
 
 const app = express();
-app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
 
 // Set up routes
 app.get('/', (req, res) => {
-    res.send('./public/index.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
-app.post('/submit', (req, res) => {
-    res.redirect(`/view?name=${encodeURIComponent(req.body.name)}&sideLength=${encodeURIComponent(req.body.sideLength)}`);
+app.post('/view', async (req, res) => {
+    
+    // ToDo
+    // const containerName = process.env.PLUGIN_CONTAINER_NAME
+    // const containerId = await apiGetRunningContainerId(containerName);
+    // const containerAccessUrl = await apiGetAccessUrlForContainerId(containerId);
+    // console.log(containerAccessUrl)
+    // const sessionToken = await apiGenerateSessionTokenForContainer(containerId);
+    // console.log(sessionToken)
+    const containerAccessUrl = "http://localhost" 
+    const sessionToken = "dummyToken"
+    const page = await loadWebshop(containerAccessUrl, sessionToken, 10);
+    res.send(page);
+
 });
 
-app.get('/view', (req, res) => {
-    const { name, sideLength } = req.query;
-    res.send('./public/webshop.html');
-});
+
+// The webshop.js loads an HTML page that references the viewer driver script
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Start the server
 const PORT = process.env.PORT || 5500;

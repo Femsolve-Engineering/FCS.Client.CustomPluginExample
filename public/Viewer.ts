@@ -1,12 +1,10 @@
 /* eslint-disable */
 
-import { getViewerBearerToken, setAndGetViewerBearerTokenFromUrl } from "./AuthTools";
-
 // Femsolve Api Declarations (when used from runtime changes)
 declare const Femsolve: typeof import("fcs-core-viewer/fcs-core-viewer@types/Api");
 
 // Viewer loading setup
-export const loadViewer = async () => {
+export const loadViewer = async (viewerSessionToken: string, redCubeSize: number) => {
 
     class ExampleService extends Femsolve.CloudViewer.PluginService {
 
@@ -34,9 +32,6 @@ export const loadViewer = async () => {
         }
     
     }
-
-    // Store bearer token
-    const viewerSessionToken = setAndGetViewerBearerTokenFromUrl();
 
     // Set style
     const viewerStyle = new Femsolve.Settings.StyleSettings.ViewerStyleSettings();
@@ -68,7 +63,6 @@ export const loadViewer = async () => {
     await viewer.loadPlugin(pluginService);
 
     // Run a custom command
-    pluginService.runCreateRedCubeCommand(10);
-    
+    pluginService.runCreateRedCubeCommand(redCubeSize);
     console.log(`Opening viewer...`)
 }
