@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 const { 
     apiGetRunningContainerId,
-    apiGetBearerToken, 
+    apiGetRefreshAndAccessToken, 
     apiGenerateSessionTokenForContainer,
     apiGetAccessUrlForContainerId
 } = require('./fcsapi');
@@ -12,11 +12,13 @@ const {
     loadWebshop
 } = require('./webshop')
 
-// Container access URL global variable
-containerAccessUrl = "http://localhost"
-
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+
+let authInfo = {
+    accessToken : '',
+    refreshToken: ''
+}
 
 // Set up routes
 app.get('/', (req, res) => {
@@ -24,21 +26,19 @@ app.get('/', (req, res) => {
 });
 
 app.post('/view', async (req, res) => {
-    
-    // ToDo
-    // const containerName = process.env.PLUGIN_CONTAINER_NAME
-    // const containerId = await apiGetRunningContainerId(containerName);
-    // const containerAccessUrl = await apiGetAccessUrlForContainerId(containerId);
-    // console.log(containerAccessUrl)
-    // const sessionToken = await apiGenerateSessionTokenForContainer(containerId);
-    // console.log(sessionToken)
-    containerAccessUrl = "http://localhost" 
-    const sessionToken = "dummyToken"
-    const page = await loadWebshop(containerAccessUrl, sessionToken, 10);
+
+
+    // Get container ID
+    const container = await apiGetRunningContainerId(process.env.PLUGIN_CONTAINER_NAME, authInfo.accessToken)
+
+    // Get access url
+    const containerUrlWithToken = await apiGenerateSessionTokenForContainer(container.id, authInfo.accessToken);
+    const urlInfo = parseUrl(containerUrlWithToken);
+
+    // Startup the hosted webapp
+    const page = await loadWebshop( urlInfo.baseUrl, urlInfo.sessionToken, 10);
     res.send(page);
-
 });
-
 
 // The webshop.js loads an HTML page that references the viewer driver script
 app.use(express.static(path.join(__dirname, 'public')));
@@ -46,6 +46,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Start the server
 const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+
+    // Login
+    const response = await apiGetRefreshAndAccessToken()
+    authInfo.accessToken = response.accessToken;
+    authInfo.refreshToken = response.refreshToken;
+
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+function parseUrl(url) {
+
+    const urlObject = new URL(url);
+    const baseUrl = urlObject.origin;
+    const sessionToken = urlObject.searchParams.get('session');
+
+    return {
+        baseUrl: baseUrl,
+        sessionToken: sessionToken
+    };
+}

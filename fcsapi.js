@@ -1,15 +1,30 @@
 const axios = require('axios');
 const API_BASE_URL = process.env.FCS_API_BASE_URL;
 
-async function apiGetRunningContainerId(containerName) {
+async function apiGetRefreshAndAccessToken() {
+    const url = `${API_BASE_URL}/api/auth/pat/sign-in`;
+
+    try {
+        const response = await axios.post(url, {
+            key: process.env.FCS_API_TOKEN_KEY,
+            secret: process.env.FCS_API_TOKEN_SECRET
+        });
+        
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tokens:', error);
+        throw error;
+    }
+}
+
+async function apiGetRunningContainerId(containerName, accessToken) {
     // Get bearer token
-    const bearerToken = await apiGetBearerToken();
     const url = `${API_BASE_URL}/api/model-containers`;
 
     try {
         const response = await axios.get(url, {
             headers: {
-                'Authorization': `Bearer ${bearerToken}`
+                'Authorization': `Bearer ${accessToken}`
             }
         });
         // Filter the containers by name and return the matched one
@@ -26,9 +41,22 @@ async function apiGetRunningContainerId(containerName) {
  * @param {number} containerId Unique ID of running container
  * @returns Dedicated viewer session token
  */
-async function apiGenerateSessionTokenForContainer(containerId) {
-    // ToDo:
-    return "$dummySessionToken";
+async function apiGenerateSessionTokenForContainer(containerId, accessToken) {
+    
+    const url = `${API_BASE_URL}/api/model-containers-instances/sessions/${containerId}`
+    try {
+        const response = await axios.post(url, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        const containerUrl = response.data.url;
+        return containerUrl;
+    } catch (error) {
+        console.error('Error fetching running containers:', error);
+        throw error;
+    }
 }
 
 async function apiGetAccessUrlForContainerId(containerId) {
@@ -36,14 +64,10 @@ async function apiGetAccessUrlForContainerId(containerId) {
     return "http://localhost/viewer"
 }
 
-async function apiGetBearerToken() {
-    // ToDo:
-    return 'DummyToken';
-}
 
 module.exports = {
     apiGetRunningContainerId,
     apiGenerateSessionTokenForContainer,
     apiGetAccessUrlForContainerId,
-    apiGetBearerToken
+    apiGetRefreshAndAccessToken
 };

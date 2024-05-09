@@ -36,7 +36,7 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
     // Set style
     const viewerStyle = new Femsolve.Settings.StyleSettings.ViewerStyleSettings();
     viewerStyle.setPresetStyle(
-        Femsolve.Settings.StyleSettings.PresetStyles.CLOUD_CAE
+        Femsolve.Settings.StyleSettings.PresetStyles.CLEAN_VIEWER
     );
 
     const allSettings = new Femsolve.CloudViewer.ViewerSettings();
@@ -58,6 +58,8 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
 
     // Start the viewer
     await viewer.startViewer();
+
+    const toolbox = Femsolve.ViewerUiBuilder.ToolboxBuilder.addToolbox('TBOX');
     
     // Register the plugin
     const pluginService = new ExampleService()
