@@ -41,7 +41,7 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
 
     const allSettings = new Femsolve.CloudViewer.ViewerSettings();
     allSettings.viewerStyleSettings = viewerStyle;
-    allSettings.ViewerServerBaseUrl = viewerBaseUrl; 
+    allSettings.ViewerServerBaseUrl = viewerBaseUrl + '/'; 
 
     // Viewer instantiation and addition of custom backend service,
     // if this part fails, nothing is loaded.
@@ -59,7 +59,7 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
     // Start the viewer
     await viewer.startViewer();
 
-    const toolbox = Femsolve.ViewerUiBuilder.ToolboxBuilder.addToolbox('TBOX');
+    // const toolbox = Femsolve.ViewerUiBuilder.ToolboxBuilder.addToolbox('TBOX');
     
     // Register the plugin
     const pluginService = new ExampleService()

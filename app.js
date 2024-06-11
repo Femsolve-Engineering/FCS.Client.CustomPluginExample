@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const url = require('url')
 
 require('dotenv').config();
 const { 
@@ -26,8 +27,6 @@ app.get('/', (req, res) => {
 });
 
 app.post('/view', async (req, res) => {
-
-
     // Get container ID
     const container = await apiGetRunningContainerId(process.env.PLUGIN_CONTAINER_NAME, authInfo.accessToken)
 
@@ -36,7 +35,7 @@ app.post('/view', async (req, res) => {
     const urlInfo = parseUrl(containerUrlWithToken);
 
     // Startup the hosted webapp
-    const page = await loadWebshop( urlInfo.baseUrl, urlInfo.sessionToken, 10);
+    const page = await loadWebshop( urlInfo.accessUrl, urlInfo.sessionToken, 10);
     res.send(page);
 });
 
@@ -56,14 +55,18 @@ app.listen(PORT, async () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 
-function parseUrl(url) {
+function parseUrl(inputUrl) {
 
-    const urlObject = new URL(url);
-    const baseUrl = urlObject.origin;
-    const sessionToken = urlObject.searchParams.get('session');
+    const parsedUrl = new URL(inputUrl);
+    // Extract the accessUrl (protocol + hostname + pathname)
+    const accessUrl = `${parsedUrl.protocol}//${parsedUrl.hostname}${parsedUrl.pathname}`;
 
+    // Extract the session token from the query parameters
+    const sessionToken = parsedUrl.searchParams.get('session');
+
+    // Return the result as an object
     return {
-        baseUrl: baseUrl,
+        accessUrl: accessUrl,
         sessionToken: sessionToken
     };
 }

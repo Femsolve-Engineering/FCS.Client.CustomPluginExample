@@ -7,7 +7,7 @@ async function loadWebshop(accessUrl, viewerSessionToken, redCubeSize) {
 <html id="fcs_html">
 
 <head>
-    <title>FCS Custom Examples 1</title>
+    <title>Webshop for selling red cubes</title>
 </head>
 
 <style>
@@ -32,7 +32,7 @@ async function loadWebshop(accessUrl, viewerSessionToken, redCubeSize) {
 <body id="fcs_body">
 
     <div id="fcs-viewer" style="visibility: hidden;"></div>
-    <script type="module" src="${accessUrl}/viewer-assets/FcsViewerBundle.js"></script>
+    <script type="module" src="${accessUrl}/viewer-assets/fcs-core-viewer/FcsViewerBundle.js"></script>
     <script type="module" src="/dist/exampleViewer.js"></script>
     <script type="module">
         const viewerModule = await import('/dist/exampleViewer.js');
