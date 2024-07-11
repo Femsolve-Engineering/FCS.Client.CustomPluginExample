@@ -35,11 +35,11 @@ app.post('/view', async (req, res) => {
     const container = await apiGetRunningContainerId(process.env.PLUGIN_CONTAINER_NAME, authInfo.accessToken)
 
     // Get access url
-    const containerInfos = await apiGenerateSessionTokenForContainer(container.id, authInfo.accessToken);
-    const accessBaseUrl = `${containerInfos.proxyAddress}/${containerInfos.containerAddressNumber}/`
+    // const containerInfos = await apiGenerateSessionTokenForContainer(container.id, authInfo.accessToken);
+    // const accessBaseUrl = `${containerInfos.proxyAddress}/${containerInfos.containerAddressNumber}/`
     
     // Startup the hosted webapp
-    const page = await loadWebshop( accessBaseUrl, containerInfos.sessionToken, 10);
+    const page = await loadWebshop( 'dummyUrl', 'dummyToken', 10);
     res.send(page);
 });
 

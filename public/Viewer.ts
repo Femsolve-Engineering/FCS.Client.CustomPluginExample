@@ -36,7 +36,7 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
     // Set style
     const viewerStyle = new Femsolve.Settings.StyleSettings.ViewerStyleSettings();
     viewerStyle.setPresetStyle(
-        Femsolve.Settings.StyleSettings.PresetStyles.CLEAN_VIEWER
+        Femsolve.Settings.StyleSettings.PresetStyles.CLOUD_CAE
     );
 
     const allSettings = new Femsolve.CloudViewer.ViewerSettings();
@@ -61,11 +61,11 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
 
     // const toolbox = Femsolve.ViewerUiBuilder.ToolboxBuilder.addToolbox('TBOX');
     
-    // Register the plugin
-    const pluginService = new ExampleService()
-    await viewer.loadPlugin(pluginService);
+    // // Register the plugin
+    // const pluginService = new ExampleService()
+    // await viewer.loadPlugin(pluginService);
 
-    // Run a custom command
-    pluginService.runCreateRedCubeCommand(redCubeSize);
+    // // Run a custom command
+    // pluginService.runCreateRedCubeCommand(redCubeSize);
     console.log(`Opening viewer...`)
 }
