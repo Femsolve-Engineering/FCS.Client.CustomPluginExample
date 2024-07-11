@@ -12,11 +12,19 @@ async function loadWebshop(accessUrl, viewerSessionToken, redCubeSize) {
 
 <style>
     #fcs_body {
+        position: relative;
+
+        top: 50px;
+        left: 100px;
+
+        width: 1200px;
+        height: 800px;
+
         margin: 0;
     }
 
     #fcs-viewer {
-        position: relative;
+        position: absolute;
         width: 100%;
         height: 100%;
 
