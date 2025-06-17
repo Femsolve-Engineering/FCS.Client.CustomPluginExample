@@ -1,12 +1,12 @@
 /* eslint-disable */
 
 // Femsolve Api Declarations (when used from runtime changes)
-declare const Femsolve: typeof import("fcs-core-viewer/fcs-core-viewer@types/Api");
+declare const Femsolve: typeof import("fcs-core-viewer/fcs-core-editor@types/Editor3D/Editor3DAPI");
 
 // Viewer loading setup
 export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: string, redCubeSize: number) => {
 
-    class ExampleService extends Femsolve.CloudViewer.PluginService {
+    class ExampleService extends Femsolve.PluginService {
 
         /************************************************************************************/
         /* !!!!! COMPULSORY INTERFACE METHODS !!!!!
@@ -39,7 +39,7 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
         Femsolve.Settings.StyleSettings.PresetStyles.CLEAN_VIEWER
     );
 
-    const allSettings = new Femsolve.CloudViewer.ViewerSettings();
+    const allSettings = new Femsolve.ViewerSettings();
     allSettings.viewerStyleSettings = viewerStyle;
     allSettings.ViewerServerBaseUrl = viewerBaseUrl; 
 
@@ -49,7 +49,7 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
         "fcs-viewer"
     ) as HTMLDivElement;
 
-    const viewer = new Femsolve.CloudViewer.Generic3DViewer(
+    const viewer = new Femsolve.Generic3DEditor(
         fcsViewerElement,
         allSettings,
         viewerSessionToken, // license token
@@ -57,7 +57,7 @@ export const loadViewer = async (viewerBaseUrl: string, viewerSessionToken: stri
     );
 
     // Start the viewer
-    await viewer.startViewer();
+    await viewer.startUp();
 
     // const toolbox = Femsolve.ViewerUiBuilder.ToolboxBuilder.addToolbox('TBOX');
     
