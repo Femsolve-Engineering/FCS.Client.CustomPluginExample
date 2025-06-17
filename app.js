@@ -21,7 +21,7 @@ const {
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-//app.options('*', cors()) 
+app.options('*', cors()) 
 
 const isHardcodedUrl = () => {
   return !!process.env.FCS_DIRECT_CONTAINER_ADDRESS;
