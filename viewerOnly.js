@@ -36,7 +36,7 @@ async function loadViewerOnly(accessUrl) {
     <script type="module" src="/dist/exampleViewer.js"></script>
     <script type="module">
         const viewerModule = await import('/dist/exampleViewer.js');
-        await Viewer.loadViewer('${accessUrl}','', 0});
+        await Viewer.loadViewer('${accessUrl}','', 0);
     </script>
 
 </body>
@@ -47,5 +47,5 @@ return page;
 }
 
 module.exports = {
-    viewerOnly
+    loadViewerOnly
 }

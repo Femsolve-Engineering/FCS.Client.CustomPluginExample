@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const url = require('url');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -15,11 +16,12 @@ const {
 } = require('./webshop')
 
 const {
-    loadViewer
+    loadViewerOnly
 } = require('./viewerOnly');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+//app.options('*', cors()) 
 
 const isHardcodedUrl = () => {
   return !!process.env.FCS_DIRECT_CONTAINER_ADDRESS;
@@ -35,7 +37,7 @@ let authInfo = {
  */
 app.get('/', async (req, res) => {
     if (isHardcodedUrl()) {
-        const page = await loadViewer(process.env.FCS_DIRECT_CONTAINER_ADDRESS);
+        const page = await loadViewerOnly(process.env.FCS_DIRECT_CONTAINER_ADDRESS);
         res.send(page);
     }
     else res.sendFile(__dirname + '/public/index.html');
